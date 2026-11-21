@@ -1,0 +1,16 @@
+{
+  "name": "talscribe-tools",
+  "private": true,
+  "description": "Strumenti di build di TALscribe",
+  "scripts": {
+    "deps": "bash fetch-deps.sh",
+    "logo": "node render-logo.js",
+    "build": "node build-win.js"
+  },
+  "dependencies": {
+    "@electron/asar": "^3.2.0",
+    "@resvg/resvg-js": "^2.6.0",
+    "png-to-ico": "^2.1.0",
+    "resedit": "^2.0.0"
+  }
+}

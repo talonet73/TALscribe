@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: file:; media-src file: 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'">
+<title>TALscribe</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="titlebar"><span class="tb-name">TALscribe</span></div>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="logo.png" alt="" class="brand-logo">
+      <div class="brand-word"><b>TAL</b><span>scribe</span></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="transcribe"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Zm7 9a7 7 0 0 1-6 6.92V21h-2v-2.08A7 7 0 0 1 5 12h2a5 5 0 0 0 10 0h2Z"/></svg>Trascrivi</button>
+      <button class="nav-item" data-page="library"><svg viewBox="0 0 24 24"><path d="M4 3h2v18H4V3Zm5 0h2v18H9V3Zm5.2.6 1.9-.6 5.6 17.1-1.9.6L14.2 3.6Z"/></svg>Libreria</button>
+      <button class="nav-item" data-page="engine"><svg viewBox="0 0 24 24"><path d="M9 2h2v3h2V2h2v3h2a2 2 0 0 1 2 2v2h3v2h-3v2h3v2h-3v2a2 2 0 0 1-2 2h-2v3h-2v-3h-2v3H9v-3H7a2 2 0 0 1-2-2v-2H2v-2h3v-2H2V9h3V7a2 2 0 0 1 2-2h2V2Zm-2 5v10h10V7H7Zm2 2h6v6H9V9Z"/></svg>Motore AI</button>
+      <button class="nav-item" data-page="settings"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1l.4 2.6h4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5-2.1-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg>Impostazioni</button>
+    </nav>
+
+    <div class="side-card" id="sideModel">
+      <div class="side-label">Motore attivo</div>
+      <div class="side-model" id="sideModelName">—</div>
+      <div class="side-hw" id="sideHw">Analisi del PC…</div>
+    </div>
+
+    <div class="side-recent">
+      <div class="side-label">Recenti</div>
+      <div id="recentList"></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+    <!-- TRANSCRIBE -->
+    <section class="page active" id="page-transcribe">
+      <div class="hero" style="--hero:#1ed760">
+        <div class="hero-kicker">Trascrizione AI locale · gratis · offline</div>
+        <h1>Cosa trascriviamo oggi?</h1>
+        <p class="hero-sub">Parlato o cantato, da un file del PC o da YouTube. Tutto resta sul tuo computer.</p>
+      </div>
+
+      <div class="content">
+        <div class="banner hidden" id="noModelBanner">
+          <div><b>Manca il motore AI.</b> Analizzo il PC e ti propongo il modello giusto in un minuto.</div>
+          <button class="btn btn-green" id="openOnboarding">Configura ora</button>
+        </div>
+
+        <div class="sources">
+          <div class="source-card drop" id="dropZone" tabindex="0">
+            <div class="source-icon file"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Zm-1 7V3.5L18.5 9H13ZM10 18a2 2 0 1 1 0-4c.36 0 .7.1 1 .27V11h4v2h-2v3a2 2 0 0 1-3 2Z"/></svg></div>
+            <div class="source-title">File dal PC</div>
+            <div class="source-sub" id="fileLabel">Trascina qui un audio o un video<br><span class="muted">mp3 · wav · m4a · flac · ogg · mp4 · mkv…</span></div>
+            <button class="btn btn-ghost" id="browseBtn">Sfoglia</button>
+          </div>
+
+          <div class="source-card yt" id="ytCard">
+            <div class="source-icon yt"><svg viewBox="0 0 24 24"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></div>
+            <div class="source-title">Link YouTube</div>
+            <div class="url-row">
+              <input id="ytUrl" type="text" placeholder="https://www.youtube.com/watch?v=…" spellcheck="false">
+              <button class="btn btn-ghost sm" id="pasteBtn" title="Incolla">Incolla</button>
+            </div>
+            <div class="source-sub muted">Scarica solo l’audio e lo trascrive.</div>
+          </div>
+        </div>
+
+        <div class="options">
+          <div class="opt">
+            <div class="opt-label">Tipo di audio</div>
+            <div class="pills" id="modePills">
+              <button class="pill" data-v="speech">🎙️ Parlato</button>
+              <button class="pill" data-v="song">🎵 Cantato</button>
+            </div>
+          </div>
+          <div class="opt">
+            <div class="opt-label">Lingua</div>
+            <select id="langSel">
+              <option value="auto">✨ Rileva da sola</option>
+              <option value="it">Italiano</option><option value="en">English</option><option value="es">Español</option>
+              <option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option>
+              <option value="nl">Nederlands</option><option value="ro">Română</option><option value="pl">Polski</option>
+              <option value="ru">Русский</option><option value="uk">Українська</option><option value="ar">العربية</option>
+              <option value="tr">Türkçe</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="zh">中文</option>
+            </select>
+          </div>
+          <div class="opt">
+            <div class="opt-label">Velocità</div>
+            <div class="pills" id="qualityPills">
+              <button class="pill" data-v="fast">⚡ Rapida</button>
+              <button class="pill" data-v="balanced">🎯 Precisa</button>
+            </div>
+          </div>
+          <div class="opt">
+            <div class="opt-label">Modello</div>
+            <select id="modelSel"></select>
+          </div>
+          <div class="opt grow">
+            <div class="opt-label">Parole chiave <span class="muted">(facoltativo: nomi, termini, slang)</span></div>
+            <input id="promptIn" type="text" placeholder="es. Roma, giallorosso, Curva Sud, Olimpico">
+          </div>
+        </div>
+
+        <div class="go-row">
+          <button class="go" id="goBtn" title="Trascrivi">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/></svg>
+          </button>
+          <div>
+            <div class="go-title">Trascrivi</div>
+            <div class="go-sub" id="goSub">Scegli un file o incolla un link</div>
+          </div>
+        </div>
+
+        <!-- live -->
+        <div class="live hidden" id="live">
+          <div class="live-head">
+            <div class="eq"><i></i><i></i><i></i><i></i><i></i></div>
+            <div><div class="live-title" id="liveTitle">In corso…</div><div class="live-stage" id="liveStage"></div></div>
+          </div>
+          <div class="live-text" id="liveText"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="page" id="page-result">
+      <div class="hero result-hero" id="resultHero">
+        <div class="cover" id="resultCover"></div>
+        <div class="result-head">
+          <div class="hero-kicker" id="resultKind">Trascrizione</div>
+          <h1 contenteditable="true" spellcheck="false" id="resultTitle">—</h1>
+          <div class="chips" id="resultChips"></div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="toolbar">
+          <button class="go small" id="playBtn" title="Riproduci"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/></svg></button>
+          <div class="tabs" id="viewTabs">
+            <button class="tab active" data-v="lines">Testo sincronizzato</button>
+            <button class="tab" data-v="plain">Testo pulito</button>
+            <button class="tab" data-v="ai">✨ Rifinito AI</button>
+            <button class="tab" data-v="summary">Riassunto</button>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn btn-ghost" id="copyBtn">Copia</button>
+          <div class="dropdown">
+            <button class="btn btn-white" id="exportBtn">Esporta ▾</button>
+            <div class="menu hidden" id="exportMenu">
+              <button data-f="txt">Testo (.txt)</button>
+              <button data-f="txt-t">Testo con tempi (.txt)</button>
+              <button data-f="srt">Sottotitoli (.srt)</button>
+              <button data-f="vtt">Sottotitoli web (.vtt)</button>
+              <button data-f="lrc">Testo karaoke (.lrc)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-lines"><div class="lines" id="lines"></div></div>
+        <div class="view hidden" id="view-plain"><pre class="plain" id="plainText"></pre></div>
+        <div class="view hidden" id="view-ai">
+          <div class="ai-box" id="aiBox"></div>
+        </div>
+        <div class="view hidden" id="view-summary">
+          <div class="ai-box" id="sumBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section class="page" id="page-library">
+      <div class="hero" style="--hero:#7c4dff">
+        <div class="hero-kicker">La tua raccolta</div>
+        <h1>Libreria</h1>
+        <p class="hero-sub" id="libCount"></p>
+      </div>
+      <div class="content">
+        <input class="search" id="libSearch" type="text" placeholder="Cerca tra titoli e testi…">
+        <div class="grid" id="libGrid"></div>
+        <div class="empty hidden" id="libEmpty">Ancora niente qui. Le trascrizioni che fai compaiono in questa pagina.</div>
+      </div>
+    </section>
+
+    <!-- ENGINE -->
+    <section class="page" id="page-engine">
+      <div class="hero" style="--hero:#00b4d8">
+        <div class="hero-kicker">Whisper · Ollama · scansione hardware</div>
+        <h1>Motore AI</h1>
+        <p class="hero-sub">TALscribe misura il tuo PC e sceglie il modello col miglior rapporto qualità / peso / velocità.</p>
+      </div>
+      <div class="content" id="engineContent">
+        <div class="hw-card" id="hwCard"><div class="loading-dots">Analizzo il PC<span>.</span><span>.</span><span>.</span></div></div>
+
+        <h2>Modelli consigliati per questo PC</h2>
+        <div class="rec-grid" id="recGrid"></div>
+        <ul class="reasons" id="reasons"></ul>
+
+        <div class="gpu-card hidden" id="gpuCard"></div>
+
+        <h2>Tutti i modelli Whisper</h2>
+        <div class="table" id="modelTable"></div>
+
+        <h2>Rifinitura testi con Ollama <span class="tag">facoltativo</span></h2>
+        <div class="ollama-card" id="ollamaCard"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="page-settings">
+      <div class="hero" style="--hero:#ff7a45">
+        <div class="hero-kicker">TALscribe</div>
+        <h1>Impostazioni</h1>
+      </div>
+      <div class="content settings">
+        <div class="set-row"><div><b>Cartella dati</b><div class="muted" id="dataDirLbl"></div></div><button class="btn btn-ghost" data-open="data">Apri</button></div>
+        <div class="set-row"><div><b>Cartella modelli</b><div class="muted">I file dei modelli Whisper scaricati</div></div><button class="btn btn-ghost" data-open="models">Apri</button></div>
+        <div class="set-row"><div><b>Downloader YouTube</b><div class="muted">YouTube cambia spesso: se i link smettono di funzionare, aggiorna.</div></div><button class="btn btn-ghost" id="ytUpdBtn">Aggiorna</button></div>
+        <div class="set-row"><div><b>Usa la GPU NVIDIA</b><div class="muted">Se hai installato il pacchetto CUDA</div></div><label class="switch"><input type="checkbox" id="gpuToggle"><span></span></label></div>
+        <div class="set-row"><div><b>Registro errori</b><div class="muted">Utile se qualcosa non va</div></div><button class="btn btn-ghost" data-open="log">Apri</button></div>
+        <div class="about">
+          <img src="logo.png" alt="">
+          <div>
+            <div class="about-name"><b>TAL</b>scribe <span class="muted" id="verLbl"></span></div>
+            <p class="muted">Motore di trascrizione: whisper.cpp (MIT) con i modelli Whisper di OpenAI. Download YouTube: yt-dlp (Unlicense) con Deno (MIT). Audio: FFmpeg (GPL). Rifinitura opzionale: Ollama (MIT).<br>Scarica da YouTube solo contenuti tuoi o che hai il diritto di usare.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- BOTTOM BAR -->
+<footer class="bar" id="bar">
+  <div class="bar-left">
+    <div class="bar-cover" id="barCover"><svg viewBox="0 0 24 24"><path d="M5 9h2v6H5V9Zm4-4h2v14H9V5Zm4 3h2v8h-2V8Zm4-2h2v12h-2V6Z"/></svg></div>
+    <div class="bar-meta"><div class="bar-title" id="barTitle">Pronto</div><div class="bar-sub" id="barSub">Nessuna trascrizione in corso</div></div>
+  </div>
+  <div class="bar-center">
+    <div class="bar-ctrls">
+      <button class="ctl" id="back10" title="-10 s"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8Z"/></svg></button>
+      <button class="ctl play" id="barPlay" title="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/></svg></button>
+      <button class="ctl" id="fwd10" title="+10 s"><svg viewBox="0 0 24 24"><path d="M12 5V2l5 4-5 4V7a6 6 0 1 0 6 6h2a8 8 0 1 1-8-8Z"/></svg></button>
+    </div>
+    <div class="bar-prog"><span id="tCur">0:00</span><div class="track" id="track"><div class="fill" id="fill"></div><div class="knob" id="knob"></div></div><span id="tTot">0:00</span></div>
+  </div>
+  <div class="bar-right">
+    <button class="btn btn-ghost sm hidden" id="cancelBtn">Annulla</button>
+    <span class="bar-pct" id="barPct"></span>
+  </div>
+  <audio id="audio" preload="metadata"></audio>
+</footer>
+
+<!-- ONBOARDING -->
+<div class="modal hidden" id="onboard">
+  <div class="modal-card">
+    <div class="ob-step" id="ob1">
+      <div class="ob-logo"><img src="logo.png" alt=""><div class="ring"></div></div>
+      <h2>Benvenuto in <b class="g">TAL</b>scribe</h2>
+      <p class="muted">Analizzo processore, memoria e scheda video per scegliere il modello AI più adatto.</p>
+      <div class="scan-lines" id="scanLines"></div>
+    </div>
+    <div class="ob-step hidden" id="ob2">
+      <h2>Ecco cosa consiglio</h2>
+      <div class="ob-hw" id="obHw"></div>
+      <div class="ob-rec" id="obRec"></div>
+      <div class="ob-actions">
+        <button class="btn btn-ghost" id="obSkip">Scelgo dopo</button>
+        <button class="btn btn-green" id="obGo">Scarica e inizia</button>
+      </div>
+      <div class="ob-prog hidden" id="obProg"><div class="track"><div class="fill" id="obFill"></div></div><div class="muted" id="obProgLbl"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

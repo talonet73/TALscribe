@@ -1,0 +1,31 @@
+TALscribe 1.0.0 - trascrizione AI locale (parlato e cantato)
+=============================================================
+
+AVVIO
+1. Estrai TUTTA la cartella dallo zip (tasto destro > Estrai tutto), per esempio in Documenti.
+   Non avviarlo da dentro lo zip.
+2. Apri la cartella TALscribe e fai doppio clic su TALscribe.exe.
+3. Se Windows mostra "PC protetto da Windows": Ulteriori informazioni > Esegui comunque
+   (succede con tutte le app non firmate digitalmente).
+4. Al primo avvio TALscribe analizza il PC e propone il modello AI: clicca "Scarica e inizia".
+   Il modello si scarica una volta sola (da 75 MB a 3 GB), poi tutto funziona offline.
+
+COSA C'E' DENTRO
+- Motore di trascrizione: whisper.cpp (modelli Whisper di OpenAI), gratuito e locale.
+- YouTube: yt-dlp + Deno. Se i link smettono di funzionare: Impostazioni > Downloader YouTube > Aggiorna.
+- Audio: FFmpeg.
+- GPU NVIDIA: dalla sezione "Motore AI" puoi installare il pacchetto CUDA (circa 460 MB) per trascrivere molto piu' veloce.
+- Rifinitura testi (facoltativa): se installi Ollama (https://ollama.com/download) TALscribe lo usa per
+  impaginare strofe e ritornelli, sistemare la punteggiatura o fare riassunti.
+
+DOVE FINISCONO I DATI
+- Modelli e trascrizioni: %LOCALAPPDATA%\TALscribe
+- Registro errori: %APPDATA%\TALscribe\talscribe-log.txt
+
+CONSIGLI PER IL CANTATO
+- Scegli "Cantato" e il modello piu' grande che il PC regge.
+- Imposta la lingua invece di "Rileva da sola" se la conosci.
+- Nel campo "Parole chiave" scrivi nomi propri e termini particolari: aiutano il riconoscimento.
+
+Scarica da YouTube solo contenuti tuoi o che hai il diritto di usare.
+Licenze: whisper.cpp (MIT), yt-dlp (Unlicense), Deno (MIT), FFmpeg (GPL), Electron (MIT), Plus Jakarta Sans (OFL).

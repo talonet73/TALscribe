@@ -1,0 +1,9 @@
+{
+  "name": "talscribe",
+  "productName": "TALscribe",
+  "version": "1.0.0",
+  "description": "Trascrizione AI locale di audio parlato e cantato, da file o YouTube",
+  "main": "main.js",
+  "author": "TAL",
+  "license": "MIT"
+}

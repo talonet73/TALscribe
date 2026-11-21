@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#7DFFB4"/>
+      <stop offset="0.38" stop-color="#1ED760"/>
+      <stop offset="0.78" stop-color="#11A247"/>
+      <stop offset="1" stop-color="#075E2A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.3" cy="0.22" r="0.75">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="0.6" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.75"/>
+      <stop offset="0.55" stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="glyph" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DDF9E7"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C9FFDD" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#03401C" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#002A10" stop-opacity="0"/><stop offset="1" stop-color="#002A10" stop-opacity="0.35"/></linearGradient>
+    <filter id="drop" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#023B19" flood-opacity="0.55"/>
+    </filter>
+    <filter id="outer" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <clipPath id="sq"><rect x="28" y="24" width="456" height="456" rx="118"/></clipPath>
+  </defs>
+
+  <!-- body -->
+  <g filter="url(#outer)">
+    <rect x="28" y="24" width="456" height="456" rx="118" fill="url(#bg)"/>
+  </g>
+  <rect x="28" y="24" width="456" height="456" rx="118" fill="url(#glow)"/>
+
+  <!-- glyph: sound waves turning into lines of text -->
+  <g filter="url(#drop)" fill="url(#glyph)">
+    <rect x="96"  y="208" width="30" height="96"  rx="15"/>
+    <rect x="144" y="156" width="30" height="200" rx="15"/>
+    <rect x="192" y="186" width="30" height="140" rx="15"/>
+    <rect x="240" y="122" width="30" height="268" rx="15"/>
+    <rect x="292" y="176" width="124" height="30" rx="15"/>
+    <rect x="292" y="241" width="96"  height="30" rx="15"/>
+    <rect x="292" y="306" width="128" height="30" rx="15"/>
+    <!-- AI sparkle -->
+    <path d="M402 84 C406 108 414 116 438 120 C414 124 406 132 402 156 C398 132 390 124 366 120 C390 116 398 108 402 84 Z"/>
+  </g>
+
+  <!-- gloss -->
+  <g clip-path="url(#sq)">
+    <path d="M28 24 H484 V214 C380 262 140 262 28 214 Z" fill="url(#gloss)" opacity="0.85"/>
+    <rect x="28" y="300" width="456" height="180" fill="url(#shade)"/>
+  </g>
+  <rect x="30" y="26" width="452" height="452" rx="116" fill="none" stroke="url(#rim)" stroke-width="4"/>
+</svg>
