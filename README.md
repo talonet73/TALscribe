@@ -81,7 +81,7 @@ npm run logo    # (facoltativo) rigenera PNG e ICO da assets/logo.svg
 npm run build   # crea dist/TALscribe e dist/TALscribe-<versione>-win-x64.zip
 ```
 
-Requisiti: Node 20+, `zip`, `unzip`, `curl`, `pip`.
+Requisiti: Node 22+, `zip`, `unzip`, `curl`, `pip`.
 
 ## Note
 
