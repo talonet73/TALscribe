@@ -7,11 +7,24 @@ const fmtT = (sec) => { sec = Math.max(0, Math.floor(sec || 0)); const h = Math.
 const fmtMB = (mb) => (mb >= 1000 ? (mb / 1024).toFixed(1).replace('.', ',') + ' GB' : mb + ' MB');
 const LANGS = { it: 'Italiano', en: 'Inglese', es: 'Spagnolo', fr: 'Francese', de: 'Tedesco', pt: 'Portoghese', nl: 'Olandese', ro: 'Rumeno', pl: 'Polacco', ru: 'Russo', uk: 'Ucraino', ar: 'Arabo', tr: 'Turco', ja: 'Giapponese', ko: 'Coreano', zh: 'Cinese' };
 
+// Without the preload bridge (e.g. index.html opened in a browser) nothing can work: say so clearly.
+if (!window.tal) {
+  document.body.innerHTML = `<div style="height:100vh;display:grid;place-items:center;text-align:center;padding:40px">
+    <div style="max-width:560px"><img src="logo.png" width="110" alt=""><h1 style="font-size:34px;margin:18px 0 10px">Apri TALscribe dall'app</h1>
+    <p style="color:#b3b3b3;font-size:16px;line-height:1.6">Questa pagina è l'interfaccia di TALscribe aperta fuori dall'app (per esempio nel browser),
+    quindi non può accedere ai file né al motore AI.<br><br>Avvia <b style="color:#fff">TALscribe.exe</b> dalla cartella estratta dallo zip.</p></div></div>`;
+  throw new Error('TALscribe: bridge non disponibile');
+}
+window.addEventListener('unhandledrejection', (e) => { console.error(e.reason); toast(cleanErr(e.reason), 'err'); e.preventDefault(); });
+window.addEventListener('error', (e) => console.error(e.error || e.message));
+
 const S = {
   info: null, hw: null, rec: null, llm: null, models: null,
   source: null, // { type:'file', path, name } | { type:'youtube', url }
   job: null, item: null, view: 'lines', ollama: null, dl: {},
 };
+
+function cleanErr(e) { return String(e && e.message || e).replace(/^Error invoking remote method '[^']+': (Error: )?/, ''); }
 
 function toast(msg, kind = '') {
   const t = $('#toast');
@@ -72,11 +85,21 @@ dz.addEventListener('drop', (e) => {
 });
 document.addEventListener('dragover', (e) => e.preventDefault());
 document.addEventListener('drop', (e) => e.preventDefault());
-$('#browseBtn').addEventListener('click', async (e) => {
-  e.stopPropagation();
-  const p = await tal.pickFile();
-  if (p) setSource({ type: 'file', path: p, name: p.split(/[\\/]/).pop() });
-});
+let picking = false;
+async function browse() {
+  if (picking || S.job) return;
+  picking = true;
+  try {
+    const p = await tal.pickFile();
+    if (p) setSource({ type: 'file', path: p, name: p.split(/[\\/]/).pop() });
+  } catch (er) {
+    toast(cleanErr(er), 'err');
+  } finally { picking = false; }
+}
+$('#browseBtn').addEventListener('click', (e) => { e.stopPropagation(); browse(); });
+// the whole card opens the file picker too
+dz.addEventListener('click', browse);
+dz.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); browse(); } });
 const YT = /^(https?:\/\/)?(www\.|m\.|music\.)?(youtube\.com\/(watch\?|shorts\/|live\/|embed\/)|youtu\.be\/)\S+/i;
 function onUrl() {
   const v = $('#ytUrl').value.trim();
@@ -121,7 +144,6 @@ async function startJob() {
     updateGo();
   } catch (e) { toast(cleanErr(e), 'err'); }
 }
-const cleanErr = (e) => String(e && e.message || e).replace(/^Error invoking remote method '[^']+': (Error: )?/, '');
 
 tal.onMeta((m) => { if (S.job && m.title) { S.job.title = m.title; $('#liveTitle').textContent = m.title; $('#barTitle').textContent = m.title; } });
 tal.onProgress((p) => {

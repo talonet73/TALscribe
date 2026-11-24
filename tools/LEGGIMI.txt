@@ -1,4 +1,4 @@
-TALscribe 1.0.0 - trascrizione AI locale (parlato e cantato)
+TALscribe 1.0.1 - trascrizione AI locale (parlato e cantato)
 =============================================================
 
 AVVIO

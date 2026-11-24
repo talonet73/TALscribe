@@ -1,9 +1,15 @@
 {
   "name": "talscribe",
   "productName": "TALscribe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Trascrizione AI locale di audio parlato e cantato, da file o YouTube",
   "main": "main.js",
   "author": "TAL",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "45.4.1"
+  }
 }

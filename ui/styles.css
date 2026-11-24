@@ -82,7 +82,8 @@ h2 { font-size: 22px; font-weight: 800; letter-spacing: -.02em; margin: 34px 0 1
 .sources { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .source-card { background: var(--card); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; transition: background .2s, box-shadow .2s, transform .2s; position: relative; overflow: hidden; outline: none; }
 .source-card:hover { background: var(--card-h); }
-.source-card.drop { border: 2px dashed #3a3a3a; }
+.source-card.drop { border: 2px dashed #3a3a3a; cursor: pointer; }
+.source-card.drop:focus-visible { border-color: #fff; }
 .source-card.drop.over { border-color: var(--green); background: #1ed76014; transform: scale(1.01); box-shadow: 0 0 0 6px #1ed76014; }
 .source-card.selected { box-shadow: inset 0 0 0 2px var(--green); }
 .source-icon { width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; box-shadow: 0 10px 24px rgba(0,0,0,.4); }

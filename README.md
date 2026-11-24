@@ -69,6 +69,15 @@ assets/          logo (SVG, PNG, ICO)
 tools/           script di build
 ```
 
+## Avvio dal codice sorgente
+
+```bash
+npm install
+npm start
+```
+
+Non aprire `ui/index.html` nel browser: l'interfaccia funziona solo dentro l'app.
+
 ## Build dello zip per Windows
 
 La build gira su Linux (o WSL) e produce una cartella portatile con `TALscribe.exe`.

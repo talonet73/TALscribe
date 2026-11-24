@@ -11,7 +11,7 @@ const ollama = require('./lib/ollama');
 const { Job } = require('./lib/transcribe');
 const formats = require('./lib/formats');
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = require('./package.json').version;
 const CUDA_URL = 'https://github.com/ggml-org/whisper.cpp/releases/download/v1.9.2/whisper-cublas-12.4.0-bin-x64.zip';
 const YTDLP_URL = 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe';
 
@@ -83,6 +83,7 @@ const send = (ch, data) => { if (win && !win.isDestroyed()) win.webContents.send
 
 app.whenReady().then(() => {
   createWindow();
+  log('finestra creata, percorso app:', app.getAppPath());
 }).catch((e) => {
   log('avvio fallito', e.stack);
   dialog.showErrorBox('TALscribe', 'Avvio non riuscito: ' + e.message + '\nRegistro: ' + logFile);
@@ -90,19 +91,31 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => app.quit());
 
 // ---------- IPC: app ----------
-ipcMain.handle('app:info', () => ({
+ipcMain.handle('app:info', () => (log('interfaccia collegata'), {
   version: APP_VERSION, dataDir, logFile, platform: process.platform, settings,
   binsOk: { ffmpeg: fs.existsSync(path.join(binDir, exe('ffmpeg'))), ytdlp: true, whisper: !!findFile(path.join(binDir, 'whisper'), exe('whisper-cli')) },
 }));
 ipcMain.handle('app:setSettings', (_e, s) => { settings = { ...settings, ...s }; saveSettings(); return settings; });
 ipcMain.handle('app:openExternal', (_e, url) => shell.openExternal(url));
 ipcMain.handle('app:openPath', (_e, which) => shell.openPath(which === 'models' ? modelsDir : which === 'log' ? logFile : dataDir));
-ipcMain.handle('app:pickFile', async () => {
-  const r = await dialog.showOpenDialog(win, {
+ipcMain.handle('app:pickFile', async (e) => {
+  const opts = {
     title: 'Scegli un file audio o video', properties: ['openFile'],
+    defaultPath: app.getPath('music'),
     filters: [{ name: 'Audio e video', extensions: ['mp3', 'wav', 'm4a', 'aac', 'flac', 'ogg', 'opus', 'wma', 'aiff', 'aif', 'amr', 'webm', 'mp4', 'mkv', 'mov', 'avi', 'm4v', '3gp'] }, { name: 'Tutti i file', extensions: ['*'] }],
-  });
-  return r.canceled ? null : r.filePaths[0];
+  };
+  const parent = BrowserWindow.fromWebContents(e.sender) || win;
+  log('sfoglia: apro la finestra di scelta file');
+  try {
+    let r;
+    try { r = await dialog.showOpenDialog(parent, opts); }
+    catch (err) { log('sfoglia: finestra legata non riuscita, riprovo', err.message); r = await dialog.showOpenDialog(opts); }
+    log('sfoglia:', r.canceled ? 'annullato' : r.filePaths[0]);
+    return r.canceled ? null : r.filePaths[0];
+  } catch (err) {
+    log('sfoglia: errore', err.stack || err.message);
+    throw new Error('Non riesco ad aprire la finestra di scelta file: ' + err.message);
+  }
 });
 
 // ---------- IPC: hardware & models ----------
